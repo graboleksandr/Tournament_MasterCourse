@@ -226,17 +226,31 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Margin="0,0,0,15">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBox x:Name="TxtSearch" Width="220" Margin="0,0,10,0" Tag="Пошук гравця..."/>
-                    <ComboBox x:Name="CmbSort" Width="180" Style="{StaticResource ModernComboBoxStyle}" VerticalContentAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="TxtSearch" Grid.Column="0" Margin="0,0,15,0"
+                         Tag="Пошук за ім'ям або прізвищем..." TextChanged="TxtSearch_TextChanged"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ComboBox x:Name="CmbSort" Width="180" Margin="0,0,10,0" SelectedIndex="0"
+                              Style="{StaticResource ModernComboBoxStyle}" VerticalContentAlignment="Center"
+                              SelectionChanged="CmbSort_SelectionChanged">
+                        <ComboBoxItem Content="Без сортування"/>
                         <ComboBoxItem Content="За алфавітом (А-Я)"/>
                         <ComboBoxItem Content="За алфавітом (Я-А)"/>
                     </ComboBox>
-                </StackPanel>
 
-                <Button Style="{StaticResource AddButtonStyle}" HorizontalAlignment="Right" Click="BtnOpenPanel_Click">
-                    <TextBlock Text="+ Додати гравця" Foreground="White"/>
-                </Button>
+                    <Button Style="{StaticResource ImportButtonStyle}" Margin="0,0,10,0" Click="BtnImport_Click">
+                        <TextBlock Text="{DynamicResource m_Import}"/>
+                    </Button>
+
+                    <Button Style="{StaticResource AddButtonStyle}" Click="BtnOpenPanel_Click">
+                        <TextBlock Text="+ Додати гравця" Foreground="White"/>
+                    </Button>
+                </StackPanel>
             </Grid>
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">

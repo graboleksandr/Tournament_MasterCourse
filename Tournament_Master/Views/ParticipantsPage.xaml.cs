@@ -58,10 +58,10 @@ namespace Tournament_Master.Views
                 switch (CmbSort.SelectedIndex)
                 {
                     case 1:
-                        filteredList = filteredList.OrderBy(p => p.LastName).ThenBy(p => p.FirstName).ToList();
+                        filteredList = filteredList.OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ToList();
                         break;
                     case 2:
-                        filteredList = filteredList.OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ToList();
+                        filteredList = filteredList.OrderByDescending(p => p.FirstName).ThenByDescending(p => p.LastName).ToList();
                         break;
                 }
             }
