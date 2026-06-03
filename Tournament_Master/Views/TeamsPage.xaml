@@ -1,0 +1,231 @@
+﻿<Page x:Class="Tournament_Master.Views.TeamsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Teams" Background="{DynamicResource WindowBg}">
+
+    <Page.Resources>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
+                                <Track.Thumb>
+                                    <Thumb>
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="{DynamicResource HoverColor}" CornerRadius="4" Opacity="0.5" x:Name="thumbBorder"/>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                        <Setter TargetName="thumbBorder" Property="Opacity" Value="0.8"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource WindowBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource HoverColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                                <Setter TargetName="border" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <BulletDecorator Background="Transparent" SnapsToDevicePixels="true">
+                            <BulletDecorator.Bullet>
+                                <Border x:Name="checkBoxBorder"
+                                        BorderBrush="{DynamicResource HoverColor}"
+                                        BorderThickness="1.5"
+                                        Background="{DynamicResource WindowBg}"
+                                        CornerRadius="5" Width="18" Height="18">
+                                    <Grid>
+                                        <Path x:Name="checkmark" Data="M 3,9 L 7,13 L 15,4"
+                                              Stroke="White" StrokeThickness="2" Visibility="Collapsed"/>
+                                    </Grid>
+                                </Border>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter TargetName="checkBoxBorder" Property="Background" Value="{DynamicResource AccentColor}"/>
+                                <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                                <Setter TargetName="checkmark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="ListItemBorder" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ListItemBorder" Property="Background" Value="{DynamicResource WindowBg}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ListItemBorder" Property="Background" Value="{DynamicResource HoverColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="btnBorder" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="8" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="btnBorder" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="btnBorder" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+            <Border Background="{DynamicResource SidebarBg}" CornerRadius="15" Padding="18" Margin="0,0,0,15" BorderBrush="{DynamicResource HoverColor}" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource m_AutoGen}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,12"/>
+                    <TextBox x:Name="TxtPlayersPerTeam" Text="2" Height="38" TextAlignment="Center" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="TxtErrorAuto" Margin="0,5,0,5" Foreground="#FF5555" FontSize="12" TextWrapping="Wrap" Visibility="Collapsed"/>
+                    <Button Content="{DynamicResource m_RandomTeams}" Click="BtnAutoGenerate_Click" Style="{StaticResource RoundedButtonStyle}"
+                            Background="Transparent" Foreground="{DynamicResource PrimaryText}" Height="38" BorderBrush="{DynamicResource HoverColor}" BorderThickness="1" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource SidebarBg}" CornerRadius="15" Padding="18" BorderBrush="{DynamicResource HoverColor}" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource m_CreateManual}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,12"/>
+                    <TextBox x:Name="TxtTeamName" Height="38" Margin="0,0,0,10"/>
+                    <ListBox x:Name="ListPlayersSelector" Height="280" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}">
+                                        <TextBlock Text="{Binding FullName}" Foreground="{DynamicResource PrimaryText}" FontWeight="Medium"/>
+                                    </CheckBox>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock x:Name="TxtErrorManual" Margin="0,8,0,0" Foreground="#FF5555" FontSize="12" TextWrapping="Wrap" Visibility="Collapsed"/>
+                    <Button Content="{DynamicResource m_AddTeam}" Click="BtnCreateManual_Click" Style="{StaticResource RoundedButtonStyle}"
+                            Background="{DynamicResource AccentColor}" Foreground="White" Height="40" Margin="0,12,0,0" BorderThickness="0"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <Border Grid.Column="1" Background="{DynamicResource SidebarBg}" CornerRadius="15" Padding="20" BorderBrush="{DynamicResource HoverColor}" BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl x:Name="TeamsDisplay">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{DynamicResource WindowBg}" CornerRadius="12" Width="295" Margin="0,0,12,12" Padding="15" BorderBrush="{DynamicResource HoverColor}" BorderThickness="0.5">
+                                <Grid>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding TeamName}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource AccentColor}" Margin="0,0,25,8" TextTrimming="CharacterEllipsis"/>
+
+                                        <ItemsControl ItemsSource="{Binding Members}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="{DynamicResource SidebarBg}" CornerRadius="6" Margin="0,0,6,6" Padding="8,4" BorderBrush="{DynamicResource HoverColor}" BorderThickness="1">
+                                                        <TextBlock Text="{Binding FullName}" FontSize="12" Foreground="{DynamicResource PrimaryText}"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+
+                                    <Button Content="✕" Click="BtnDelete_Click" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource RoundedButtonStyle}"
+                                            Foreground="#D32F2F" Background="Transparent" BorderThickness="0" FontWeight="Bold" Width="24" Height="24" FontSize="14"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Page>

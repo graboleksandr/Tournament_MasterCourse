@@ -1,0 +1,126 @@
+﻿<Window x:Class="Tournament_Master.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tournament Master" Height="750" Width="1300"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Icon="Resources/Images/Icon.png"
+        Closing="Window_Closing"
+        Background="{DynamicResource WindowBg}"
+        SnapsToDevicePixels="True" 
+        UseLayoutRounding="True">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="LoginOrange" Color="{DynamicResource AccentColorValue}"/>
+        <SolidColorBrush x:Key="SidebarCream" Color="{DynamicResource SidebarBgValue}"/>
+        <SolidColorBrush x:Key="TextBrown" Color="{DynamicResource PrimaryTextValue}"/>
+
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Margin" Value="10,4"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="25,0,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="12" BorderThickness="0">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource HoverColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Бокова панель. Завдяки розтягуванню та налаштуванням вікна зазори зникли -->
+        <Border Grid.Column="0" Background="{DynamicResource SidebarBg}" CornerRadius="0,25,25,0" VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="TOURNAMENT" 
+                           Foreground="{DynamicResource AccentColor}" 
+                           FontSize="24" FontWeight="Black" 
+                           HorizontalAlignment="Center" Margin="0,40,0,40"
+                           FontFamily="Segoe UI Black"/>
+
+                <StackPanel Grid.Row="1" Margin="10,0">
+                    <Button x:Name="BtnHome" Click="BtnHome_Click" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="" Margin="0,0,15,0" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource m_Home}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnParticipants" Click="BtnParticipants_Click" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="" Margin="0,0,15,0" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource m_Players}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnTeams" Click="BtnTeams_Click" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="" Margin="0,0,15,0" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource m_Teams}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnSchedule" Click="BtnSchedule_Click" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="" Margin="0,0,15,0" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource m_Schedule}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnLeaderboard" Click="BtnNavigateLeaderboard_Click" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="" Margin="0,0,15,0" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource m_Leaderboard}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnArchive" Click="BtnArchive_Click" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="" Margin="0,0,15,0" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource m_Archive}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Separator Margin="20,20" Background="{DynamicResource PrimaryText}" Opacity="0.1"/>
+
+                    <Button x:Name="BtnSettings" Click="BtnSettings_Click" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="" Margin="0,0,15,0" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource SettingsHeader}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
+    </Grid>
+</Window>

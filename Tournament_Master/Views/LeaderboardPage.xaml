@@ -1,0 +1,88 @@
+﻿<Page x:Class="Tournament_Master.Views.LeaderboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource WindowBg}" Title="Рейтинг"
+      UseLayoutRounding="True" 
+      RenderOptions.BitmapScalingMode="HighQuality"
+      TextOptions.TextFormattingMode="Display">
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{DynamicResource m_LeaderboardHeader}" FontSize="32" FontWeight="Bold" 
+                   Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,20"/>
+
+        <Grid Grid.Row="1" Margin="22,0,22,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="#" Foreground="{DynamicResource PrimaryText}" Opacity="0.4" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+            <TextBlock Grid.Column="1" Text="{DynamicResource m_ColParticipant}" Foreground="{DynamicResource PrimaryText}" Opacity="0.4" FontWeight="SemiBold" Margin="15,0" FontSize="12"/>
+            <TextBlock Grid.Column="2" Text="{DynamicResource m_ColGames}" Foreground="{DynamicResource PrimaryText}" Opacity="0.4" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+            <TextBlock Grid.Column="3" Text="{DynamicResource m_ColGoals}" Foreground="{DynamicResource PrimaryText}" Opacity="0.4" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+            <TextBlock Grid.Column="4" Text="{DynamicResource m_ColPoints}" Foreground="{DynamicResource PrimaryText}" Opacity="0.4" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+        </Grid>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden">
+            <ItemsControl x:Name="LeaderboardList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="2,0,2,12" Background="{DynamicResource SidebarBg}" CornerRadius="12" Height="70"
+                                SnapsToDevicePixels="True" BorderBrush="{DynamicResource HoverColor}" BorderThickness="1">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="8" Direction="270" Opacity="0.05" ShadowDepth="1" Color="Black"/>
+                            </Border.Effect>
+
+                            <Grid Margin="20,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" Width="32" Height="32" CornerRadius="16" 
+                                        Background="{Binding PosBackground}" SnapsToDevicePixels="True">
+                                    <TextBlock Text="{Binding Position}" Foreground="{Binding PosForeground}" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                               FontWeight="Bold" FontSize="14"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+                                    <TextBlock Text="{Binding Name}" FontSize="15" FontWeight="SemiBold" 
+                                               Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding MatchesPlayed}" FontSize="16" FontWeight="Bold" 
+                                               HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBlock Text="{DynamicResource m_GamesLabel}" FontSize="10" 
+                                               Foreground="{DynamicResource PrimaryText}" Opacity="0.5" HorizontalAlignment="Center"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="3" Text="{Binding GoalsDiff}" Foreground="{DynamicResource PrimaryText}" 
+                                           Opacity="0.6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" FontWeight="SemiBold"/>
+
+                                <Border Grid.Column="4" Background="{DynamicResource WindowBg}" CornerRadius="8" Padding="5" Height="40" Width="50"
+                                        BorderBrush="{DynamicResource AccentColor}" BorderThickness="1">
+                                    <TextBlock Text="{Binding Points}" Foreground="{DynamicResource AccentColor}" FontSize="18" 
+                                               FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Page>

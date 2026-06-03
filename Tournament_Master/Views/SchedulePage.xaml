@@ -1,0 +1,132 @@
+﻿<Page x:Class="Tournament_Master.Views.SchedulePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:Tournament_Master"
+      Background="{DynamicResource WindowBg}" Title="Розклад">
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <Style x:Key="ButtonTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style x:Key="DarkButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource SidebarBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}"
+                                BorderBrush="{DynamicResource HoverColor}" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,25">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{DynamicResource SidebarBg}" CornerRadius="15" Padding="15,5" Margin="0,0,20,0">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="" Foreground="{DynamicResource PrimaryText}" Opacity="0.5" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <Grid>
+                            <TextBlock Text="{DynamicResource m_SearchMatch}" Foreground="{DynamicResource PrimaryText}" Opacity="0.5" VerticalAlignment="Center"
+                                       Visibility="{Binding ElementName=TxtSearchMatch, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <TextBox x:Name="TxtSearchMatch" Background="Transparent" BorderThickness="0" Width="400"
+                                     Foreground="{DynamicResource PrimaryText}" VerticalContentAlignment="Center" TextChanged="TxtSearchMatch_TextChanged"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Button Grid.Column="1" Style="{StaticResource DarkButtonStyle}" Click="BtnGenerateSchedule_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource m_CreateSchedule}" Style="{StaticResource ButtonTextBlockStyle}" Foreground="{DynamicResource PrimaryText}"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="MatchesList" ItemsSource="{Binding Source={x:Static local:DataStorage.AllMatches}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="350" Margin="10" Background="{DynamicResource SidebarBg}" CornerRadius="12" BorderThickness="1" BorderBrush="{DynamicResource HoverColor}">
+                            <Grid Margin="15">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <TextBlock Text="{DynamicResource m_Round}" Foreground="{DynamicResource PrimaryText}" Opacity="0.5" FontSize="11" Margin="0,0,4,0"/>
+                                    <TextBlock Text="{Binding Round}" Foreground="{DynamicResource PrimaryText}" Opacity="0.5" FontSize="11"/>
+                                </StackPanel>
+
+                                <Grid Grid.Row="1" Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="{Binding Team1}" Foreground="{DynamicResource PrimaryText}" FontWeight="Bold" 
+                                               FontSize="14" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"/>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="15,0">
+                                        <TextBox Text="{Binding Score1, UpdateSourceTrigger=PropertyChanged}" Width="35" Height="30" 
+                                                 Background="{DynamicResource WindowBg}" Foreground="{DynamicResource PrimaryText}" 
+                                                 BorderThickness="1" BorderBrush="{DynamicResource HoverColor}" TextAlignment="Center" VerticalContentAlignment="Center"/>
+                                        <TextBlock Text=" : " Foreground="{DynamicResource AccentColor}" FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding Score2, UpdateSourceTrigger=PropertyChanged}" Width="35" Height="30" 
+                                                 Background="{DynamicResource WindowBg}" Foreground="{DynamicResource PrimaryText}" 
+                                                 BorderThickness="1" BorderBrush="{DynamicResource HoverColor}" TextAlignment="Center" VerticalContentAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="2" Text="{Binding Team2}" Foreground="{DynamicResource PrimaryText}" FontWeight="Bold" 
+                                               FontSize="14" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" 
+                                        Foreground="{DynamicResource PrimaryText}" Opacity="0.5" Content="✕" Click="BtnDeleteMatch_Click" Margin="0,-10,-5,0"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Margin="0,20,0,0" HorizontalAlignment="Right">
+            <Button Content="{DynamicResource m_SaveResults}" Click="BtnSaveResults_Click" 
+                    Background="{DynamicResource AccentColor}" Foreground="White" FontWeight="Bold" Padding="20,10" BorderThickness="0">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>
