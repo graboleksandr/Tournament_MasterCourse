@@ -6,6 +6,9 @@
     <sys:String x:Key="ThemeOption">Interface Theme</sys:String>
     <sys:String x:Key="LangOption">Application Language</sys:String>
 
+    <sys:String x:Key="m_LoggedInAs">Logged in as:</sys:String>
+    <sys:String x:Key="m_Logout">Logout</sys:String>
+
     <sys:String x:Key="m_Home">Home</sys:String>
     <sys:String x:Key="m_Players">Players</sys:String>
     <sys:String x:Key="m_Teams">Teams</sys:String>
@@ -19,7 +22,7 @@
     <sys:String x:Key="m_AddPlayer">Add Player</sys:String>
     <sys:String x:Key="m_AddTeam">Add Team</sys:String>
     <sys:String x:Key="m_SearchMatch">Search by team...</sys:String>
-    <sys:String x:Key="m_TotalPlayers">Players: 0</sys:String>
+    <sys:String x:Key="m_TotalPlayers">Total players:</sys:String>
     <sys:String x:Key="m_RecentTournaments">Recent saved tournaments:</sys:String>
     <sys:String x:Key="m_TotalWins">Total Wins</sys:String>
 
@@ -35,6 +38,20 @@
     <sys:String x:Key="m_LeaderboardHeader">Leaderboard</sys:String>
     <sys:String x:Key="m_GamesLabel">games</sys:String>
     <sys:String x:Key="m_TournamentMatrix">Tournament Matrix</sys:String>
+
+    <sys:String x:Key="m_ColParticipant">Participant</sys:String>
+    <sys:String x:Key="m_ColGames">Games</sys:String>
+    <sys:String x:Key="m_ColGoals">Goals</sys:String>
+    <sys:String x:Key="m_ColPoints">Points</sys:String>
+    <sys:String x:Key="m_ArchiveHeader">Tournament Archive</sys:String>
+
+    <sys:String x:Key="m_ErrRequiredFields">Please fill in all fields</sys:String>
+    <sys:String x:Key="m_ErrTooShort">Minimum 2 characters in each field</sys:String>
+    <sys:String x:Key="m_ErrInvalidChars">Only letters, spaces and hyphens are allowed</sys:String>
+
+    <sys:String x:Key="ScheduleGenerated">Match schedule generated successfully!</sys:String>
+    <sys:String x:Key="ResultsSaved">Results saved successfully!</sys:String>
+    <sys:String x:Key="ArchiveMatches">Matches:</sys:String>
 
     <sys:String x:Key="m_CreateNewTournament">Create New Tournament</sys:String>
 

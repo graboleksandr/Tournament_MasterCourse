@@ -6,6 +6,9 @@
     <sys:String x:Key="ThemeOption">Тема інтерфейсу</sys:String>
     <sys:String x:Key="LangOption">Мова програми</sys:String>
 
+    <sys:String x:Key="m_LoggedInAs">Ви ввійшли як:</sys:String>
+    <sys:String x:Key="m_Logout">Вийти</sys:String>
+
     <sys:String x:Key="m_Home">Головна</sys:String>
     <sys:String x:Key="m_Players">Гравці</sys:String>
     <sys:String x:Key="m_Teams">Команди</sys:String>
@@ -19,7 +22,7 @@
     <sys:String x:Key="m_AddPlayer">Додати гравця</sys:String>
     <sys:String x:Key="m_AddTeam">Додати команду</sys:String>
     <sys:String x:Key="m_SearchMatch">Пошук за командою...</sys:String>
-    <sys:String x:Key="m_TotalPlayers">Гравців: 0</sys:String>
+    <sys:String x:Key="m_TotalPlayers">Кількість гравців:</sys:String>
     <sys:String x:Key="m_RecentTournaments">Останні збережені турніри:</sys:String>
     <sys:String x:Key="m_TotalWins">Перемог</sys:String>
 
@@ -35,6 +38,20 @@
     <sys:String x:Key="m_LeaderboardHeader">Рейтинг учасників</sys:String>
     <sys:String x:Key="m_GamesLabel">ігор</sys:String>
     <sys:String x:Key="m_TournamentMatrix">Матриця результатів</sys:String>
+
+    <sys:String x:Key="m_ColParticipant">Учасник</sys:String>
+    <sys:String x:Key="m_ColGames">Ігри</sys:String>
+    <sys:String x:Key="m_ColGoals">Голи</sys:String>
+    <sys:String x:Key="m_ColPoints">Очки</sys:String>
+    <sys:String x:Key="m_ArchiveHeader">Архів турнірів</sys:String>
+
+    <sys:String x:Key="m_ErrRequiredFields">Заповніть усі поля</sys:String>
+    <sys:String x:Key="m_ErrTooShort">Мінімум 2 символи в кожному полі</sys:String>
+    <sys:String x:Key="m_ErrInvalidChars">Дозволені лише літери, пробіл та дефіс</sys:String>
+
+    <sys:String x:Key="ScheduleGenerated">Розклад матчів успішно створено!</sys:String>
+    <sys:String x:Key="ResultsSaved">Результати успішно збережено!</sys:String>
+    <sys:String x:Key="ArchiveMatches">Матчів:</sys:String>
 
     <sys:String x:Key="m_CreateNewTournament">Створити новий турнір</sys:String>
 
