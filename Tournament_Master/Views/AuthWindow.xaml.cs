@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation; // Додано для підтримки анімацій
 using Tournament_Master.Models;
 using Tournament_Master;
 
@@ -56,7 +57,6 @@ namespace Tournament_Master.Views
 
             if (user != null)
             {
-                // ВИПРАВЛЕНО: Видалено помилкове посилання на DataStorage.ClearData()
                 DataStorage.CurrentUser = user.Login;
                 DataStorage.LoadAll();
 
@@ -67,7 +67,6 @@ namespace Tournament_Master.Views
             }
             else
             {
-                // Змінено префікс на m_
                 StatusLabel.Text = GetLocalizedText("m_ErrorWrongCredentials", "Невірний логін або пароль");
             }
         }
@@ -78,7 +77,6 @@ namespace Tournament_Master.Views
             if (string.IsNullOrWhiteSpace(RegLogin.Text) || RegPassword.Password.Length < 4)
             {
                 StatusLabelReg.Foreground = Brushes.Orange;
-                // Змінено префікс на m_
                 StatusLabelReg.Text = GetLocalizedText("m_ErrorInvalidInput", "Перевірте логін та пароль (мін. 4 симв.)");
                 return;
             }
@@ -88,7 +86,6 @@ namespace Tournament_Master.Views
             if (users.Any(u => u.Login.Equals(RegLogin.Text.Trim(), StringComparison.OrdinalIgnoreCase)))
             {
                 StatusLabelReg.Foreground = Brushes.Red;
-                // Змінено префікс на m_
                 StatusLabelReg.Text = GetLocalizedText("m_ErrorLoginTaken", "Цей логін вже зайнятий");
                 return;
             }
@@ -106,7 +103,6 @@ namespace Tournament_Master.Views
             {
                 File.WriteAllText(UsersFilePath, JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true }));
                 StatusLabelReg.Foreground = Brushes.Green;
-                // Змінено префікс на m_
                 StatusLabelReg.Text = GetLocalizedText("m_RegSuccess", "Успіх! Тепер увійдіть");
             }
             catch (Exception ex)
@@ -117,16 +113,46 @@ namespace Tournament_Master.Views
             }
         }
 
+        // --- НАВІГАЦІЯ З ПЛАВНОЮ АНІМАЦІЄЮ ---
         private void ShowRegister_Click(object sender, RoutedEventArgs e)
         {
-            LoginPanel.Visibility = Visibility.Collapsed;
-            RegisterPanel.Visibility = Visibility.Visible;
+            AnimatePanelTransition(LoginPanel, RegisterPanel);
         }
 
         private void ShowLogin_Click(object sender, RoutedEventArgs e)
         {
-            RegisterPanel.Visibility = Visibility.Collapsed;
-            LoginPanel.Visibility = Visibility.Visible;
+            AnimatePanelTransition(RegisterPanel, LoginPanel);
+        }
+
+        /// <summary>
+        /// Плавно ховає одну панель за допомогою Opacity і проявляє іншу.
+        /// </summary>
+        private void AnimatePanelTransition(StackPanel toHide, StackPanel toShow)
+        {
+            var duration = TimeSpan.FromSeconds(0.25);
+
+            // Анімація згасання для поточної панелі
+            var fadeOut = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 0.0,
+                Duration = new Duration(duration)
+            };
+            fadeOut.Completed += (s, e) => toHide.Visibility = Visibility.Hidden;
+
+            // Анімація проявлення для нової панелі
+            var fadeIn = new DoubleAnimation
+            {
+                From = 0.0,
+                To = 1.0,
+                Duration = new Duration(duration)
+            };
+
+            toShow.Visibility = Visibility.Visible;
+
+            // Запуск анімації властивості Opacity
+            toHide.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+            toShow.BeginAnimation(UIElement.OpacityProperty, fadeIn);
         }
 
         private List<UserData> LoadUsers()

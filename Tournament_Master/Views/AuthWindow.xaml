@@ -1,15 +1,15 @@
 ﻿<Window x:Class="Tournament_Master.Views.AuthWindow"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            Title="Tournament Master" 
-            Height="700" Width="1050"
-            WindowStartupLocation="CenterScreen"
-            WindowStyle="None"
-            WindowState="Maximized"
-            AllowsTransparency="True"
-            Background="Transparent"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tournament Master" 
+        Height="700" Width="1050"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        WindowState="Maximized"
+        AllowsTransparency="True"
+        Background="Transparent"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
 
     <Window.Resources>
         <Style x:Key="AuthTextBoxStyle" TargetType="TextBox">
@@ -25,15 +25,15 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="10"
-                                    Padding="{TemplateBinding Padding}">
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
                             <ScrollViewer x:Name="PART_ContentHost" 
-                                              Focusable="false" 
-                                              HorizontalScrollBarVisibility="Hidden" 
-                                              VerticalScrollBarVisibility="Hidden"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                          Focusable="false" 
+                                          HorizontalScrollBarVisibility="Hidden" 
+                                          VerticalScrollBarVisibility="Hidden"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
@@ -59,15 +59,15 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
                         <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="10"
-                                    Padding="{TemplateBinding Padding}">
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
                             <ScrollViewer x:Name="PART_ContentHost" 
-                                              Focusable="false" 
-                                              HorizontalScrollBarVisibility="Hidden" 
-                                              VerticalScrollBarVisibility="Hidden"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                          Focusable="false" 
+                                          HorizontalScrollBarVisibility="Hidden" 
+                                          VerticalScrollBarVisibility="Hidden"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
@@ -88,10 +88,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBoxItem">
                         <Border x:Name="ItemBorder" 
-                                    Background="{TemplateBinding Background}" 
-                                    CornerRadius="8" 
-                                    Margin="4,2" 
-                                    Padding="{TemplateBinding Padding}">
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                Margin="4,2" 
+                                Padding="{TemplateBinding Padding}">
                             <ContentPresenter />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -133,11 +133,11 @@
 
                             <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" PopupAnimation="None">
                                 <Border x:Name="DropDownBorder" 
-                                            Background="#FFFFFF" 
-                                            CornerRadius="12" 
-                                            BorderThickness="1" 
-                                            BorderBrush="#D1D5DB" 
-                                            MinWidth="{TemplateBinding ActualWidth}">
+                                        Background="#FFFFFF" 
+                                        CornerRadius="12" 
+                                        BorderThickness="1" 
+                                        BorderBrush="#D1D5DB" 
+                                        MinWidth="{TemplateBinding ActualWidth}">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.1" Color="#000000"/>
                                     </Border.Effect>
@@ -218,12 +218,12 @@
         <Image Source="pack://application:,,,/Resources/Images/Background.jpg" Stretch="UniformToFill" />
 
         <Border Width="420" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Center"
-                    Background="#FFFFFF" 
-                    CornerRadius="24" 
-                    BorderBrush="#E5E7EB"
-                    BorderThickness="1">
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center"
+                Background="#FFFFFF" 
+                CornerRadius="24" 
+                BorderBrush="#E5E7EB"
+                BorderThickness="1">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="35" ShadowDepth="4" Opacity="0.15" Color="#000000"/>
             </Border.Effect>
@@ -241,7 +241,7 @@
                 </StackPanel>
 
                 <Grid Grid.Row="1" Margin="0,10">
-                    <StackPanel x:Name="LoginPanel" Visibility="Visible">
+                    <StackPanel x:Name="LoginPanel" Visibility="Visible" Opacity="1" VerticalAlignment="Center">
                         <TextBlock Text="{DynamicResource m_Authorization}" FontSize="18" FontWeight="Bold" Foreground="#111827" Margin="0,0,0,15" HorizontalAlignment="Center"/>
 
                         <TextBlock Text="{DynamicResource m_Login}" Foreground="#374151" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,5"/>
@@ -262,7 +262,7 @@
                         </TextBlock>
                     </StackPanel>
 
-                    <StackPanel x:Name="RegisterPanel" Visibility="Collapsed">
+                    <StackPanel x:Name="RegisterPanel" Visibility="Hidden" Opacity="0" VerticalAlignment="Center">
                         <TextBlock Text="{DynamicResource m_CreateAccount}" FontSize="18" FontWeight="Bold" Foreground="#111827" Margin="0,0,0,15" HorizontalAlignment="Center"/>
 
                         <Grid>
@@ -306,21 +306,21 @@
                 </Grid>
 
                 <Button Grid.Row="2" 
-                            Content="{DynamicResource m_ExitApp}" 
-                            Click="BtnExitApp_Click"
-                            Margin="0,15,0,0"
-                            Cursor="Hand"
-                            FocusVisualStyle="{x:Null}">
+                        Content="{DynamicResource m_ExitApp}" 
+                        Click="BtnExitApp_Click"
+                        Margin="0,15,0,0"
+                        Cursor="Hand"
+                        FocusVisualStyle="{x:Null}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <TextBlock x:Name="Txt" 
-                                           Text="{TemplateBinding Content}" 
-                                           Foreground="#DC2626" 
-                                           FontSize="13" 
-                                           FontWeight="SemiBold" 
-                                           Opacity="0.7" 
-                                           HorizontalAlignment="Center"
-                                           TextDecorations="None"/>
+                                       Text="{TemplateBinding Content}" 
+                                       Foreground="#DC2626" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Opacity="0.7" 
+                                       HorizontalAlignment="Center"
+                                       TextDecorations="None"/>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="Txt" Property="Opacity" Value="1"/>

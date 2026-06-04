@@ -41,9 +41,70 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                        <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="btnBorder" Storyboard.TargetProperty="Opacity" To="0.85" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="btnBorder" Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="btnBorder" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CancelButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="btnBorder" 
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
+                                                            To="#1F808080" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="btnBorder" 
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
+                                                            To="#00000000" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="btnBorder" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -232,15 +293,15 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox x:Name="TxtSearch" Grid.Column="0" Margin="0,0,15,0"
-                         Tag="Пошук за ім'ям або прізвищем..." TextChanged="TxtSearch_TextChanged"/>
+                         Tag="{DynamicResource m_SearchPlaceholder}" TextChanged="TxtSearch_TextChanged"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <ComboBox x:Name="CmbSort" Width="180" Margin="0,0,10,0" SelectedIndex="0"
                               Style="{StaticResource ModernComboBoxStyle}" VerticalContentAlignment="Center"
                               SelectionChanged="CmbSort_SelectionChanged">
-                        <ComboBoxItem Content="Без сортування"/>
-                        <ComboBoxItem Content="За алфавітом (А-Я)"/>
-                        <ComboBoxItem Content="За алфавітом (Я-А)"/>
+                        <ComboBoxItem Content="{DynamicResource m_SortNone}"/>
+                        <ComboBoxItem Content="{DynamicResource m_SortAsc}"/>
+                        <ComboBoxItem Content="{DynamicResource m_SortDesc}"/>
                     </ComboBox>
 
                     <Button Style="{StaticResource ImportButtonStyle}" Margin="0,0,10,0" Click="BtnImport_Click">
@@ -248,12 +309,12 @@
                     </Button>
 
                     <Button Style="{StaticResource AddButtonStyle}" Click="BtnOpenPanel_Click">
-                        <TextBlock Text="+ Додати гравця" Foreground="White"/>
+                        <TextBlock Text="{DynamicResource m_AddPlayerBtn}" Foreground="White"/>
                     </Button>
                 </StackPanel>
             </Grid>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
                 <ItemsControl x:Name="ParticipantsCards">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -302,15 +363,15 @@
         <Border x:Name="AddPanel" Grid.Column="1" Width="0" Background="{DynamicResource SidebarBg}" 
                 CornerRadius="12" Margin="15,0,0,0" BorderBrush="{DynamicResource HoverColor}" BorderThickness="1">
             <StackPanel Margin="20" Width="250">
-                <TextBlock Text="Новий гравець" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,15"/>
+                <TextBlock Text="{DynamicResource m_NewPlayerHeader}" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,15"/>
 
-                <TextBox x:Name="TxtFirstName" Margin="0,6" Tag="Ім'я"/>
-                <TextBox x:Name="TxtLastName" Margin="0,6" Tag="Прізвище"/>
+                <TextBox x:Name="TxtFirstName" Margin="0,6" Tag="{DynamicResource m_FirstName}"/>
+                <TextBox x:Name="TxtLastName" Margin="0,6" Tag="{DynamicResource m_LastName}"/>
 
                 <TextBlock x:Name="TxtPanelError" Foreground="#D32F2F" FontSize="12" Margin="2,4,2,0" TextWrapping="Wrap" Visibility="Collapsed"/>
 
-                <Button Content="Зберегти" Style="{StaticResource AddButtonStyle}" Click="BtnSaveNewParticipant_Click" Margin="0,20,0,5"/>
-                <Button Content="Скасувати" Click="BtnClosePanel_Click" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource PrimaryText}" Margin="0,5"/>
+                <Button Content="{DynamicResource m_SaveBtn}" Style="{StaticResource AddButtonStyle}" Click="BtnSaveNewParticipant_Click" Margin="0,20,0,5"/>
+                <Button Content="{DynamicResource m_CancelBtn}" Style="{StaticResource CancelButtonStyle}" Click="BtnClosePanel_Click" Margin="0,5"/>
             </StackPanel>
         </Border>
     </Grid>

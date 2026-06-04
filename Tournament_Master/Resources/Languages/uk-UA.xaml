@@ -12,7 +12,8 @@
     <sys:String x:Key="m_Home">Головна</sys:String>
     <sys:String x:Key="m_Players">Гравці</sys:String>
     <sys:String x:Key="m_Teams">Команди</sys:String>
-    <sys:String x:Key="m_Schedule">Розклад</sys:String>
+    <sys:String x:Key="m_Schedule">Rozklad</sys:String>
+    <!-- Або "Розклад" -->
     <sys:String x:Key="m_Leaderboard">Таблиця</sys:String>
     <sys:String x:Key="m_Archive">Архів</sys:String>
 
@@ -24,7 +25,7 @@
     <sys:String x:Key="m_SearchMatch">Пошук за командою...</sys:String>
     <sys:String x:Key="m_TotalPlayers">Кількість гравців:</sys:String>
     <sys:String x:Key="m_RecentTournaments">Останні збережені турніри:</sys:String>
-    <sys:String x:Key="m_TotalWins">Перемог</sys:String>
+    <sys:String x:Key="m_TotalWins">Перемог разом</sys:String>
 
     <sys:String x:Key="m_AutoGen">Авто-генерація</sys:String>
     <sys:String x:Key="m_CreateManual">Створити вручну</sys:String>
@@ -59,18 +60,19 @@
     <sys:String x:Key="m_RoundRobinIndivDesc">Кожен учасник грає з кожним іншим однакову кількість разів. Ідеально для особистих ліг та тривалих чемпіонатів.</sys:String>
 
     <sys:String x:Key="m_SingleElimTitle">Олімпійська система (Плей-офф)</sys:String>
-    <sys:String x:Key="m_SingleElimDesc">Турнір на вибування. Учасник залишає змагання після першої ж поразки. Швидке визначення фіналіста.</sys:String>
+    <sys:String x:Key="m_SingleElimDesc">Турнір на вибування. Учасник залишає змагання після першої ж поразки. Ідеально для фіналів кубків та динамічних шоу-матчів.</sys:String>
 
-    <sys:String x:Key="m_RoundRobinTeamTitle">Командний круговий турнір</sys:String>
-    <sys:String x:Key="m_RoundRobinTeamDesc">Всі додані гравці будуть випадковим чином розподілені на команди. Команди грають між собою за крудовою системою.</sys:String>
+    <!-- ТУТ ПОЧИНАЮТЬСЯ ДОПЕРЕКЛАДЕНІ ЕЛЕМЕНТИ, ЯКІ БУЛИ ВІДСУТНІ: -->
+    <sys:String x:Key="m_RoundRobinTeamTitle">Командна кругова система</sys:String>
+    <sys:String x:Key="m_RoundRobinTeamDesc">Усі додані гравці випадковим чином діляться на команди. Команди грають між собою за круговою системою.</sys:String>
 
-    <sys:String x:Key="m_TeamElimTitle">Командний Плей-офф</sys:String>
-    <sys:String x:Key="m_TeamElimDesc">Гравці випадково діляться на обрану кількість команд. Турнір проходить за олімпійською системою на вибування.</sys:String>
+    <sys:String x:Key="m_TeamElimTitle">Командний плей-офф</sys:String>
+    <sys:String x:Key="m_TeamElimDesc">Гравці випадковим чином діляться на команди. Турнір проходить за олімпійською системою на вибування.</sys:String>
 
     <sys:String x:Key="m_ErrorWrongCredentials">Невірний логін або пароль</sys:String>
-    <sys:String x:Key="m_ErrorInvalidInput">Перевірте логін та пароль (мін. 4 симв.)</sys:String>
-    <sys:String x:Key="m_ErrorLoginTaken">Цей логін вже зайнятий</sys:String>
-    <sys:String x:Key="m_RegSuccess">Успіх! Тепер увійдіть</sys:String>
+    <sys:String x:Key="m_ErrorInvalidInput">Перевірте логін та пароль (мін. 4 символи)</sys:String>
+    <sys:String x:Key="m_ErrorLoginTaken">Цей логін уже зайнятий</sys:String>
+    <sys:String x:Key="m_RegSuccess">Успішно! Тепер увійдіть у систему</sys:String>
 
     <sys:String x:Key="m_Authorization">Авторизація</sys:String>
     <sys:String x:Key="m_Login">Логін</sys:String>
@@ -78,15 +80,27 @@
     <sys:String x:Key="m_SignIn">Увійти</sys:String>
     <sys:String x:Key="m_DontHaveAccount">Немає акаунту?</sys:String>
     <sys:String x:Key="m_RegisterLink">Зареєструватися</sys:String>
-    <sys:String x:Key="m_CreateAccount">Створення акаунту</sys:String>
+    <sys:String x:Key="m_CreateAccount">Створити акаунт</sys:String>
     <sys:String x:Key="m_FirstName">Ім'я</sys:String>
     <sys:String x:Key="m_LastName">Прізвище</sys:String>
     <sys:String x:Key="m_Gender">Стать</sys:String>
-    <sys:String x:Key="m_Male">Чоловіча</sys:String>
-    <sys:String x:Key="m_Female">Жіноча</sys:String>
-    <sys:String x:Key="m_LoginHint">Логін (Нікнейм)</sys:String>
+    <sys:String x:Key="m_Male">Чоловік</sys:String>
+    <sys:String x:Key="m_Female">Жінка</sys:String>
+    <sys:String x:Key="m_LoginHint">Логін (Ім'я користувача)</sys:String>
     <sys:String x:Key="m_SignUp">Зареєструватися</sys:String>
     <sys:String x:Key="m_AlreadyHaveAccount">Вже є акаунт?</sys:String>
     <sys:String x:Key="m_ExitApp">Вийти з програми</sys:String>
+    <sys:String x:Key="m_SearchPlaceholder">Пошук за ім'ям або прізвищем...</sys:String>
+    <sys:String x:Key="m_SortNone">Без сортування</sys:String>
+    <sys:String x:Key="m_SortAsc">За алфавітом (А-Я)</sys:String>
+    <sys:String x:Key="m_SortDesc">За алфавітом (Я-А)</sys:String>
+    <sys:String x:Key="m_AddPlayerBtn">+ Додати гравця</sys:String>
+    <sys:String x:Key="m_NewPlayerHeader">Новий гравець</sys:String>
+    <sys:String x:Key="m_SaveBtn">Зберегти</sys:String>
+    <sys:String x:Key="m_CancelBtn">Скасувати</sys:String>
+    <sys:String x:Key="m_Edit">Редагувати</sys:String>
+    <sys:String x:Key="m_Save">Зберегти</sys:String>
+
+    
 
 </ResourceDictionary>

@@ -88,5 +88,15 @@
     <sys:String x:Key="m_SignUp">Sign Up</sys:String>
     <sys:String x:Key="m_AlreadyHaveAccount">Already have an account?</sys:String>
     <sys:String x:Key="m_ExitApp">Exit Application</sys:String>
+    <sys:String x:Key="m_SearchPlaceholder">Search by name or surname...</sys:String>
+    <sys:String x:Key="m_SortNone">No sorting</sys:String>
+    <sys:String x:Key="m_SortAsc">Alphabetical (A-Z)</sys:String>
+    <sys:String x:Key="m_SortDesc">Alphabetical (Z-A)</sys:String>
+    <sys:String x:Key="m_AddPlayerBtn">+ Add Player</sys:String>
+    <sys:String x:Key="m_NewPlayerHeader">New Player</sys:String>
+    <sys:String x:Key="m_SaveBtn">Save</sys:String>
+    <sys:String x:Key="m_CancelBtn">Cancel</sys:String>
+    <sys:String x:Key="m_Edit">Edit</sys:String>
+    <sys:String x:Key="m_Save">Save</sys:String>
 
 </ResourceDictionary>

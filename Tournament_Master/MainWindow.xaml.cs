@@ -84,12 +84,12 @@ namespace Tournament_Master
         private void NavigateToPage(Page page, Button targetButton)
         {
             if (page == null) return;
-
             MainFrame.Navigate(page);
-            // Метод UpdateActiveButtonHighlight звідси можна прибрати, 
-            // бо тепер усім керує подія MainFrame_Navigated
         }
 
+        /// <summary>
+        /// Керує підсвіткою активної кнопки у меню.
+        /// </summary>
         private void UpdateActiveButtonHighlight(Button activeButton)
         {
             var buttons = new[] { BtnHome, BtnParticipants, BtnTeams, BtnSchedule, BtnLeaderboard, BtnSettings, BtnArchive };
@@ -100,7 +100,9 @@ namespace Tournament_Master
 
                 if (btn == activeButton)
                 {
-                    btn.Background = Application.Current.Resources["HoverColor"] as Brush ?? new SolidColorBrush(Color.FromRgb(240, 240, 240));
+                    // ВИПРАВЛЕНО: Замість прямого присвоєння бруша, створюємо динамічне посилання.
+                    // Тепер кнопка буде миттєво змінювати свій колір при зміні теми!
+                    btn.SetResourceReference(Button.BackgroundProperty, "HoverColor");
                 }
                 else
                 {
@@ -168,33 +170,19 @@ namespace Tournament_Master
 
         private void BtnMinimize_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
 
+        // --- ВИПРАВЛЕНО: Селектори (якщо вони є на MainWindow) тепер викликають централізовані методи App ---
         private void LanguageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!_isInitialized) return;
-            var cb = sender as ComboBox;
-            string path = cb.SelectedIndex == 1 ? "Resources/Languages/en-US.xaml" : "Resources/Languages/uk-UA.xaml";
-            ApplyResource("Languages/", path);
+            if (!_isInitialized || !(sender is ComboBox cb)) return;
+            string langCode = cb.SelectedIndex == 1 ? "en-US" : "uk-UA";
+            App.ChangeLanguage(langCode);
         }
 
         private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!_isInitialized) return;
-            var cb = sender as ComboBox;
-            string path = cb.SelectedIndex == 1 ? "Resources/Themes/DarkTheme.xaml" : "Resources/Themes/LightTheme.xaml";
-            ApplyResource("Themes/", path);
-        }
-
-        private void ApplyResource(string folderFilter, string fullPath)
-        {
-            try
-            {
-                var uri = new Uri(fullPath, UriKind.Relative);
-                ResourceDictionary newDict = Application.LoadComponent(uri) as ResourceDictionary;
-                var oldDict = Application.Current.Resources.MergedDictionaries.FirstOrDefault(d => d.Source != null && d.Source.OriginalString.Contains(folderFilter));
-                if (oldDict != null) Application.Current.Resources.MergedDictionaries.Remove(oldDict);
-                Application.Current.Resources.MergedDictionaries.Add(newDict);
-            }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Resource Error: {ex.Message}"); }
+            if (!_isInitialized || !(sender is ComboBox cb)) return;
+            string themeName = cb.SelectedIndex == 1 ? "DarkTheme" : "LightTheme";
+            App.ChangeTheme(themeName);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

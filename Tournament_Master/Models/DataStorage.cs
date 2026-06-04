@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Security.Cryptography;
 using System.Linq;
+using System.Threading.Tasks;
 using Tournament_Master.Models;
 
 namespace Tournament_Master
@@ -22,6 +24,14 @@ namespace Tournament_Master
         public static bool IsTeamMode { get; set; } = false;
         public static Tournament ActiveTournament { get; set; } = null;
 
+        // Налаштування з підтримкою збереження посилань на об'єкти
+        private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNameCaseInsensitive = true,
+            ReferenceHandler = ReferenceHandler.Preserve // Рятує від клонування об'єктів Participant в командах
+        };
+
         public static void ClearData()
         {
             AllParticipants.Clear();
@@ -36,13 +46,24 @@ namespace Tournament_Master
 
         public static void SetupNewTournamentSession(Tournament tournament)
         {
+            if (tournament == null) return;
+
             ActiveTournament = tournament;
             CurrentTournamentName = tournament.Title;
             IsTeamMode = (tournament.Mode == TournamentMode.Team);
 
+            // Якщо переданий турнір вже має дані, копіюємо їх, а не просто чистимо списки
             AllParticipants.Clear();
+            if (tournament.Participants != null)
+                foreach (var p in tournament.Participants) AllParticipants.Add(p);
+
             AllTeams.Clear();
+            if (tournament.Teams != null)
+                foreach (var t in tournament.Teams) AllTeams.Add(t);
+
             AllMatches.Clear();
+            if (tournament.Matches != null)
+                foreach (var m in tournament.Matches) AllMatches.Add(m);
 
             ActiveTournament.Participants = AllParticipants;
             ActiveTournament.Teams = AllTeams;
@@ -78,7 +99,7 @@ namespace Tournament_Master
             if (AllParticipants == null || AllParticipants.Count < 2)
                 return "Необхідно мати хоча б 2 учасників!";
 
-            if (value <= 0) return "Вкажіть коректне числове значение!";
+            if (value <= 0) return "Вкажіть коректне числове значення!";
 
             var shuffledPlayers = AllParticipants.OrderBy(p => Guid.NewGuid()).ToList();
             AllTeams.Clear();
@@ -176,14 +197,12 @@ namespace Tournament_Master
             return path;
         }
 
-        // --- РОЗУМНЕ ЗБЕРЕЖЕННЯ З ПІДТРИМКОЮ АДМІНІСТРАТОРА ---
         public static void SaveAll()
         {
             if (string.IsNullOrEmpty(CurrentUser)) CurrentUser = "Guest";
 
             try
             {
-                var options = new JsonSerializerOptions { WriteIndented = true };
                 string folder = GetUserFolderPath();
 
                 if (ActiveTournament != null)
@@ -209,7 +228,6 @@ namespace Tournament_Master
                     }
                 }
 
-                // Гарантуємо, що кожен турнір має прописаний шлях перед збереженням
                 foreach (var t in SavedTournaments)
                 {
                     if (string.IsNullOrEmpty(t.StorageFilePath))
@@ -219,10 +237,8 @@ namespace Tournament_Master
                     }
                 }
 
-                // Розподіляємо збереження залежно від ролі
                 if (CurrentUser.Equals("admin", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Групуємо всі поточні турніри за їхніми рідними файлами
                     var groups = SavedTournaments.GroupBy(t => t.StorageFilePath);
                     var savedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -231,11 +247,10 @@ namespace Tournament_Master
                         string dir = Path.GetDirectoryName(group.Key);
                         if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-                        File.WriteAllText(group.Key, JsonSerializer.Serialize(group.ToList(), options));
+                        File.WriteAllText(group.Key, JsonSerializer.Serialize(group.ToList(), JsonOptions));
                         savedPaths.Add(group.Key);
                     }
 
-                    // Перевіряємо, чи адмін видалив останні турніри якихось користувачів (щоб очистити їхні файли)
                     string rootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UsersData");
                     if (Directory.Exists(rootDir))
                     {
@@ -244,42 +259,37 @@ namespace Tournament_Master
                             string tPath = Path.Combine(uFolder, "tournaments.json");
                             if (File.Exists(tPath) && !savedPaths.Contains(tPath))
                             {
-                                // Якщо у списку більше немає турнірів для цього файлу — очищаємо його
-                                File.WriteAllText(tPath, JsonSerializer.Serialize(new List<Tournament>(), options));
+                                File.WriteAllText(tPath, JsonSerializer.Serialize(new List<Tournament>(), JsonOptions));
                             }
                         }
                     }
                 }
                 else
                 {
-                    // Звичайний користувач записує дані виключно у свій файл
                     string tPath = Path.Combine(folder, "tournaments.json");
-                    File.WriteAllText(tPath, JsonSerializer.Serialize(SavedTournaments, options));
+                    File.WriteAllText(tPath, JsonSerializer.Serialize(SavedTournaments, JsonOptions));
                 }
 
-                // Запис активної робочої сесії поточного користувача
-                File.WriteAllText(Path.Combine(folder, "participants.json"), JsonSerializer.Serialize(AllParticipants, options));
-                File.WriteAllText(Path.Combine(folder, "teams.json"), JsonSerializer.Serialize(AllTeams, options));
-                File.WriteAllText(Path.Combine(folder, "matches.json"), JsonSerializer.Serialize(AllMatches, options));
+                File.WriteAllText(Path.Combine(folder, "participants.json"), JsonSerializer.Serialize(AllParticipants, JsonOptions));
+                File.WriteAllText(Path.Combine(folder, "teams.json"), JsonSerializer.Serialize(AllTeams, JsonOptions));
+                File.WriteAllText(Path.Combine(folder, "matches.json"), JsonSerializer.Serialize(AllMatches, JsonOptions));
 
                 var settings = new Dictionary<string, string>
                 {
                     { "TournamentName", CurrentTournamentName },
                     { "IsTeamMode", IsTeamMode.ToString() }
                 };
-                File.WriteAllText(Path.Combine(folder, "settings.json"), JsonSerializer.Serialize(settings, options));
+                File.WriteAllText(Path.Combine(folder, "settings.json"), JsonSerializer.Serialize(settings, JsonOptions));
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
         }
 
-        // --- РОЗУМНЕ ЗАВАНТАЖЕННЯ З ПІДТРИМКОЮ АДМІНІСТРАТОРА ---
         public static void LoadAll()
         {
             if (string.IsNullOrEmpty(CurrentUser)) CurrentUser = "Guest";
 
             try
             {
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 string folder = GetUserFolderPath();
 
                 AllParticipants.Clear();
@@ -297,14 +307,14 @@ namespace Tournament_Master
                             string tPath = Path.Combine(uFolder, "tournaments.json");
                             if (File.Exists(tPath))
                             {
-                                var data = JsonSerializer.Deserialize<ObservableCollection<Tournament>>(File.ReadAllText(tPath), options);
+                                var data = JsonSerializer.Deserialize<ObservableCollection<Tournament>>(File.ReadAllText(tPath), JsonOptions);
                                 if (data != null)
                                 {
                                     foreach (var item in data)
                                     {
                                         if (!SavedTournaments.Any(x => x.Title == item.Title && x.Date == item.Date))
                                         {
-                                            item.StorageFilePath = tPath; // Запам'ятовуємо джерело файлу
+                                            item.StorageFilePath = tPath;
                                             SavedTournaments.Add(item);
                                         }
                                     }
@@ -318,7 +328,7 @@ namespace Tournament_Master
                     string tPath = Path.Combine(folder, "tournaments.json");
                     if (File.Exists(tPath))
                     {
-                        var data = JsonSerializer.Deserialize<ObservableCollection<Tournament>>(File.ReadAllText(tPath), options);
+                        var data = JsonSerializer.Deserialize<ObservableCollection<Tournament>>(File.ReadAllText(tPath), JsonOptions);
                         if (data != null)
                         {
                             foreach (var item in data)
@@ -330,32 +340,31 @@ namespace Tournament_Master
                     }
                 }
 
-                // Завантаження поточних сесійних файлів з папки поточного користувача
                 string pPath = Path.Combine(folder, "participants.json");
                 if (File.Exists(pPath))
                 {
-                    var data = JsonSerializer.Deserialize<ObservableCollection<Participant>>(File.ReadAllText(pPath), options);
+                    var data = JsonSerializer.Deserialize<ObservableCollection<Participant>>(File.ReadAllText(pPath), JsonOptions);
                     if (data != null) foreach (var item in data) AllParticipants.Add(item);
                 }
 
                 string teamPath = Path.Combine(folder, "teams.json");
                 if (File.Exists(teamPath))
                 {
-                    var data = JsonSerializer.Deserialize<ObservableCollection<Team>>(File.ReadAllText(teamPath), options);
+                    var data = JsonSerializer.Deserialize<ObservableCollection<Team>>(File.ReadAllText(teamPath), JsonOptions);
                     if (data != null) foreach (var item in data) AllTeams.Add(item);
                 }
 
                 string mPath = Path.Combine(folder, "matches.json");
                 if (File.Exists(mPath))
                 {
-                    var data = JsonSerializer.Deserialize<ObservableCollection<Match>>(File.ReadAllText(mPath), options);
+                    var data = JsonSerializer.Deserialize<ObservableCollection<Match>>(File.ReadAllText(mPath), JsonOptions);
                     if (data != null) foreach (var item in data) AllMatches.Add(item);
                 }
 
                 string sPath = Path.Combine(folder, "settings.json");
                 if (File.Exists(sPath))
                 {
-                    var settings = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(sPath), options);
+                    var settings = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(sPath), JsonOptions);
                     if (settings != null)
                     {
                         if (settings.TryGetValue("TournamentName", out string name))

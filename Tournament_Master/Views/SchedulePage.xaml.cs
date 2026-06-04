@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
 using Tournament_Master.Models;
 
 namespace Tournament_Master.Views
@@ -11,6 +13,7 @@ namespace Tournament_Master.Views
     public partial class SchedulePage : Page
     {
         private Tournament _tournament;
+        private DispatcherTimer _statusTimer;
 
         public SchedulePage() : this(DataStorage.ActiveTournament)
         {
@@ -32,14 +35,12 @@ namespace Tournament_Master.Views
                 DataStorage.AllParticipants = _tournament.Participants;
                 DataStorage.AllTeams = _tournament.Teams;
 
-                // Безпечний пошук панелі в XAML
-                var PanelTeamSelection = FindName("PanelTeamSelection") as FrameworkElement;
-
                 if (_tournament.Mode == TournamentMode.Team || (_tournament.TournamentType?.Contains("Командний") ?? false))
                 {
                     _tournament.Mode = TournamentMode.Team;
                     DataStorage.IsTeamMode = true;
 
+                    // Відображаємо панель вибору кількості команд, якщо вони ще не створені
                     if (PanelTeamSelection != null)
                     {
                         PanelTeamSelection.Visibility = (DataStorage.AllTeams.Count == 0) ? Visibility.Visible : Visibility.Collapsed;
@@ -54,6 +55,38 @@ namespace Tournament_Master.Views
             }
 
             RefreshMatchesList();
+        }
+
+        // МЕТОД ДЛЯ ВИВЕДЕННЯ ПОВІДОМЛЕНЬ ВПРОГРАМІ ЗНИЗУ
+        private void ShowStatus(string message, bool isError = false)
+        {
+            if (TxtStatusMessage == null) return;
+
+            // Зупиняємо попередній таймер, якщо він працював
+            _statusTimer?.Stop();
+
+            TxtStatusMessage.Text = message;
+
+            // Якщо помилка — підсвічуємо червоним, якщо успіх — кольором акценту теми
+            if (isError)
+            {
+                TxtStatusMessage.Foreground = new SolidColorBrush(Color.FromRgb(211, 47, 47)); // Червоний
+            }
+            else
+            {
+                TxtStatusMessage.Foreground = (Brush)FindResource("AccentColor");
+            }
+
+            TxtStatusMessage.Visibility = Visibility.Visible;
+
+            // Сховуємо повідомлення автоматично через 3 секунди
+            _statusTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+            _statusTimer.Tick += (s, args) =>
+            {
+                TxtStatusMessage.Visibility = Visibility.Collapsed;
+                _statusTimer.Stop();
+            };
+            _statusTimer.Start();
         }
 
         private void RefreshMatchesList()
@@ -80,11 +113,6 @@ namespace Tournament_Master.Views
         {
             if (DataStorage.AllMatches == null) return;
 
-            // Динамічний пошук елементів, щоб уникнути помилок компіляції
-            var CmbTeamsCount = FindName("CmbTeamsCount") as ComboBox;
-            var PanelTeamSelection = FindName("PanelTeamSelection") as FrameworkElement;
-            var TxtStatusMessage = FindName("TxtStatusMessage") as TextBlock;
-
             DataStorage.AllMatches.Clear();
             List<string> targets = new List<string>();
 
@@ -98,13 +126,13 @@ namespace Tournament_Master.Views
                 {
                     if (DataStorage.AllParticipants == null || DataStorage.AllParticipants.Count < 2)
                     {
-                        MessageBox.Show("Необхідно мати хоча б 2 учасників для створення команд!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        ShowStatus("Необхідно мати хоча б 2 учасників для створення команд!", true);
                         return;
                     }
 
                     if (CmbTeamsCount == null || CmbTeamsCount.SelectedItem == null)
                     {
-                        MessageBox.Show("Будь ласка, оберіть кількість команд для генерації!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        ShowStatus("Будь ласка, оберіть кількість команд для генерації!", true);
                         return;
                     }
 
@@ -112,7 +140,7 @@ namespace Tournament_Master.Views
                     {
                         if (DataStorage.AllParticipants.Count < chosenTeamsCount)
                         {
-                            MessageBox.Show($"Учасників менше ({DataStorage.AllParticipants.Count}), ніж обрана кількість команд ({chosenTeamsCount})!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            ShowStatus($"Учасників менше ({DataStorage.AllParticipants.Count}), ніж обрана кількість команд ({chosenTeamsCount})!", true);
                             return;
                         }
 
@@ -135,6 +163,7 @@ namespace Tournament_Master.Views
 
                         targets = DataStorage.AllTeams.Select(t => t.TeamName).ToList();
 
+                        // Після успішної генерації ховаємо панель вибору
                         if (PanelTeamSelection != null) PanelTeamSelection.Visibility = Visibility.Collapsed;
                     }
                 }
@@ -143,7 +172,7 @@ namespace Tournament_Master.Views
             {
                 if (DataStorage.AllParticipants == null || DataStorage.AllParticipants.Count < 2)
                 {
-                    MessageBox.Show("Додайте хоча б 2 учасників для генерації розкладу!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ShowStatus("Додайте хоча б 2 учасників для генерації розкладу!", true);
                     return;
                 }
                 targets = DataStorage.AllParticipants.Select(p => p.FullName).ToList();
@@ -168,16 +197,8 @@ namespace Tournament_Master.Views
             DataStorage.SaveAll();
             RefreshMatchesList();
 
-            if (TxtStatusMessage != null)
-            {
-                TxtStatusMessage.Text = Application.Current.TryFindResource("ScheduleGenerated")?.ToString()
-                                       ?? "Match schedule generated successfully!";
-
-                TxtStatusMessage.Visibility = Visibility.Visible;
-                var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
-                timer.Tick += (s, args) => { TxtStatusMessage.Visibility = Visibility.Collapsed; timer.Stop(); };
-                timer.Start();
-            }
+            string successMsg = Application.Current.TryFindResource("ScheduleGenerated")?.ToString() ?? "Розклад матчів успішно згенеровано!";
+            ShowStatus(successMsg, false);
         }
 
         private void GenerateRoundRobin(List<string> list)
@@ -259,7 +280,6 @@ namespace Tournament_Master.Views
 
         private void TxtSearchMatch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Видалено неіснуючий RefreshUI()
             RefreshMatchesList();
         }
 
@@ -276,13 +296,12 @@ namespace Tournament_Master.Views
 
                 DataStorage.SaveAll();
                 RefreshMatchesList();
+                ShowStatus("Матч видалено з розкладу", false);
             }
         }
 
         private void BtnSaveResults_Click(object sender, RoutedEventArgs e)
         {
-            var TxtStatusMessage = FindName("TxtStatusMessage") as TextBlock;
-
             if (DataStorage.AllMatches != null)
             {
                 foreach (var match in DataStorage.AllMatches)
@@ -305,16 +324,8 @@ namespace Tournament_Master.Views
 
             DataStorage.SaveAll();
 
-            if (TxtStatusMessage != null)
-            {
-                TxtStatusMessage.Text = Application.Current.TryFindResource("ResultsSaved")?.ToString()
-                                       ?? "Results saved successfully!";
-
-                TxtStatusMessage.Visibility = Visibility.Visible;
-                var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
-                timer.Tick += (s, args) => { TxtStatusMessage.Visibility = Visibility.Collapsed; timer.Stop(); };
-                timer.Start();
-            }
+            string saveMsg = Application.Current.TryFindResource("ResultsSaved")?.ToString() ?? "Результати успішно збережено!";
+            ShowStatus(saveMsg, false);
         }
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)

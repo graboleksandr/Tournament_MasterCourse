@@ -39,8 +39,9 @@ namespace Tournament_Master
         {
             var mergedDicts = Application.Current.Resources.MergedDictionaries;
 
-            // Шукаємо існуючу тему
-            var oldTheme = mergedDicts.FirstOrDefault(d => d.Source != null && d.Source.OriginalString.Contains("Themes/"));
+            // Шукаємо стару тему БЕЗ урахування регістру (малі чи великі літери — байдуже)
+            var oldTheme = mergedDicts.FirstOrDefault(d => d.Source != null &&
+                d.Source.OriginalString.IndexOf("themes/", StringComparison.OrdinalIgnoreCase) >= 0);
 
             var newTheme = new ResourceDictionary
             {
@@ -50,24 +51,21 @@ namespace Tournament_Master
             if (oldTheme != null)
             {
                 int index = mergedDicts.IndexOf(oldTheme);
-                mergedDicts[index] = newTheme; // Заміна
+                mergedDicts[index] = newTheme; // Замінюємо за індексом
             }
             else
             {
-                mergedDicts.Add(newTheme); // Додавання, якщо не було
+                mergedDicts.Add(newTheme); // Додаємо, якщо не було
             }
         }
 
-        /// <summary>
-        /// Динамічно змінює мову додатка.
-        /// </summary>
-        /// <param name="langCode">Код мови (наприклад, "uk-UA" або "en-US").</param>
         public static void ChangeLanguage(string langCode)
         {
             var mergedDicts = Application.Current.Resources.MergedDictionaries;
 
-            // Шукаємо існуючу мову
-            var oldLang = mergedDicts.FirstOrDefault(d => d.Source != null && d.Source.OriginalString.Contains("Languages/"));
+            // Шукаємо мову БЕЗ урахування регістру
+            var oldLang = mergedDicts.FirstOrDefault(d => d.Source != null &&
+                d.Source.OriginalString.IndexOf("languages/", StringComparison.OrdinalIgnoreCase) >= 0);
 
             var newLang = new ResourceDictionary
             {
@@ -77,11 +75,11 @@ namespace Tournament_Master
             if (oldLang != null)
             {
                 int index = mergedDicts.IndexOf(oldLang);
-                mergedDicts[index] = newLang; // Заміна
+                mergedDicts[index] = newLang;
             }
             else
             {
-                mergedDicts.Add(newLang); // Додавання, якщо не було
+                mergedDicts.Add(newLang);
             }
         }
     }
